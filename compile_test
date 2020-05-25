@@ -1,0 +1,41 @@
+function special_loop(group, transition_list, number_loops)
+{
+    group.takeOff(5);
+    group.loop(transition_list, number_loops);
+    group.land();
+}
+
+
+d1 = new Drone("ip address");
+d2 = new Drone("ip address");
+d3 = new Drone("ip address");
+
+
+initial_formation = new Formation([{drone:d1,x:1,y:1},{drone:d2,x:2,y:1},{drone:d3,x:3,y:1},{drone:d4,x:4,y:1}]);
+second_formation = new Formation([{drone:d1, x:1,y:0},{drone:d2, x:3,y:0},{drone:d3, x:0,y:3},{drone:d4, x:3,y:3}]);
+loop_formation_start = new Formation([{drone:d1,x:1,y:4},{drone:d2,x:2,y:1},{drone:d3,x:3,y:1},{drone:d4,x:4,y:4}]);
+loop_formation_end = new Formation([{drone:d1,x:1,y:1},{drone:d2,x:2,y:4},{drone:d3,x:3,y:4},{drone:d4,x:4,y:1}]);
+
+
+group = new Group(initial_formation);
+
+height = 10;
+
+group.takeOff(height);
+
+group.wait(5);
+
+second_formation_transition = new Transition(second_formation, time);
+loop_start_transition = new Transition(loop_formation_start, time);
+loop_end_transition = new Transition(loop_formation_end, time);
+
+group.transition(second_formation_transition);
+
+
+numberOfLoops = 5;
+transitions = [loop_start_transition, loop_end_transition];
+group.loop(transitions, numberOfLoops);
+
+group.transition(second_formation_transition);
+
+group.land();
