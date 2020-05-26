@@ -21,6 +21,10 @@ class Assignment(AST):
     def fillSymbolTable(self):
         if self.expr:
             expr_type, expr_value = self.expr.fillSymbolTable()
+
+            if AST.getEntry(self.id) is not None:
+                if AST.getEntry(self.id).type != expr_type:
+                    raise Exception('Error when trying to assign type {0} to {1}'.format(expr_type, AST.getEntry(self.id).type))
             return SymbolTableEntry(self.id, expr_type, expr_value)
         else:
             self.cmd.generateInstruction()

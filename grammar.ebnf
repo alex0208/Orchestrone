@@ -1,0 +1,37 @@
+<Program> ::= (<Function>';')* (<Assignment>';')+;
+<Assignment> ::= <Variable><Expansion> | ;
+<Expansion> ::= '=' <Expr> | '.'<Command> | <FuncArgs>;
+
+<Expr> ::= new <Type> | <Term> | <Calculation>;
+<Term> ::= <String> | '[' <List> ']';
+<Type> ::= <Drone_decl> | <Group_decl> | <Formation_decl> | <Transition_decl>;
+
+<Calculation> ::= <Num> ((+ | -) <Num>)*;
+<Num> ::= <Factor> ((* | /) <Factor>)*;
+<Factor> ::= <Number> | <Variable>;
+
+<Drone_decl> ::= Drone'('<String>')';
+<Group_decl> ::= Group'('<Formation>')';
+
+<Formation_decl> ::= Formation'('[<Drone_list>]')';
+<Formation> ::= new <Formation_decl> | <Variable>;
+<Transition_decl> ::= Transition'('<Formation>',' time')';
+<Transition> ::= new <Transition_decl> | <Variable>;
+
+<Drone_obj> ::= '{'drone':' <Variable>, x':' <Number>, y':' <Number>'}';
+<Drone_list> ::= <Drone_obj> (',' <Drone_obj)*;
+
+<Command> ::= takeoff'('<Number>')'
+            | land'()'
+            | loop'(['<List>'],' <Number>')'
+            | transition'('<Transition>')'
+            | wait'('<Number>')';
+
+<List> ::= <Variable> (, <Variable>)*;
+
+<String> ::= \".*\";
+<Variable> ::= [a-zA-Z_][a-zA-Z_0-9]*;
+<Number> ::= [0-9]+;
+
+<Function> ::= function <Variable> <FuncArgs> '{' (<Assignment>';')+; '}';
+<FuncArgs> ::= '(' <List> ')';

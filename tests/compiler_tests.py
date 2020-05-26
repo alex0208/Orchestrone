@@ -37,11 +37,7 @@ class TestCompiler(unittest.TestCase):
         tokens = lexer.getAllTokens()
         parser = Parser(source, tokens)
         ast = parser.Program()
-
-
-
         ast.fillSymbolTable()
-        print(ast.instructionsTable)
         compiled = Compiler(ast.instructionsTable)
 
         assert type(compiled) is Compiler
@@ -115,7 +111,6 @@ class TestCompiler(unittest.TestCase):
         symTable = ast.fillSymbolTable()
         table_items = symTable.getTable()
 
-
         assert 'd1' in symTable.getTable()
         assert type(table_items['d1']) == SymbolTableEntry
         assert table_items['d1'].identifier == 'd1'
@@ -152,7 +147,6 @@ class TestCompiler(unittest.TestCase):
 
         assert 'formation' in table_items
         assert 'group' in table_items
-        # assert type(table_items['group']) == SymbolTableEntry
         for key, value in symTable.getTable().items():
             assert type(key) is str
             assert type(value) is SymbolTableEntry
@@ -215,14 +209,14 @@ class TestCompiler(unittest.TestCase):
 
     def test_wrong_group_assignment_raises_error(self):
         source = """group = new Group(formation);"""
+        AST.symbolTable = SymbolTable()
         lexer = Lexer(source)
         tokens = lexer.getAllTokens()
         parser = Parser(source, tokens)
         ast = parser.Program()
 
         #Program.Assignment.Expression.Group.Formation.fillSymbolTable
-        self.assertRaises(Exception, ast.assignments[0].expr.obj.formation.fillSymbolTable())
-        # self.assertRaises(Exception, ast.fillSymbolTable)
+        self.assertRaises(Exception, ast.assignments[0].expr.obj.formation.fillSymbolTable)
 
     def test_compiler_fail_only_assignments(self):
         source = """x = 10;"""
@@ -287,6 +281,17 @@ class TestCompiler(unittest.TestCase):
         self.assertRaises(Exception, Compiler)
         # compiled = Compiler(ast.instructionsTable)
 
+    def test_variable_aliasing_fails(self):
+        source = """x = "hello world";
+                    x = 5; """
+        AST.symbolTable = SymbolTable()
+        lexer = Lexer(source)
+        tokens = lexer.getAllTokens()
+        parser = Parser(source, tokens)
+        ast = parser.Program()
+        ast.symbolTable = SymbolTable()
+
+        self.assertRaises(Exception, ast.assignments[0].expr.fillSymbolTable())
 
 if __name__ == "__main__":
     unittest.main()
