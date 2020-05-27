@@ -43,7 +43,7 @@ class Compiler(object):
                 movement_offset = self.calculate_movement_offset(self.start_config, transition_dict)
                 movement_queue = self.generate_movement_queue(movement_offset)
                 flying_instrcutions.append(movement_queue)
-                # self.start_config = transition_dict
+                self.start_config = transition_dict
         return flying_instrcutions
 
     def calculate_movement_offset(self, start, finish):
@@ -90,15 +90,15 @@ class Compiler(object):
             temp = []
             for drone_dir in dirs:
                 if isinstance(drone_dir, str):
-                    temp.append(self.convert_to_ascii(drone_dir))
+                    temp.append(self.convert_to_hex(drone_dir))
                 else:
                     for dir in drone_dir[idx]:
-                        temp.append(self.convert_to_ascii(dir))
+                        temp.append(self.convert_to_hex(dir))
             udp_instr.append(temp)
 
         return udp_instr
 
-    def convert_to_ascii(self,command):
+    def convert_to_hex(self,command):
         return [format(ord(c), 'x') for c in command]
 
     def collision_detection(self, start, finish):
