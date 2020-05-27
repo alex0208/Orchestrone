@@ -1,0 +1,19 @@
+d1 = new Drone("ip1");
+D1 = new Drone("ip2");
+d2 = 10;
+height = new Drone("ip3");
+
+initial_formation = new Formation([{drone:d1,x:1,y:1},{drone:d2,x:2,y:1}]);
+group = new Group(initial_formation);
+
+group.takeOff(10);
+
+second_formation = new Formation([{drone:d1,x:1,y:2},{drone:d2,x:2,y:2}]);
+
+transition = new Transition(second_formation, 10);
+
+group.transition(transition);
+
+group.wait(5);
+
+group.land();

@@ -27,6 +27,11 @@ class Assignment(AST):
                     raise Exception('Error when trying to assign type {0} to {1}'.format(expr_type, AST.getEntry(self.id).type))
             return SymbolTableEntry(self.id, expr_type, expr_value)
         else:
+            if AST.getEntry(self.id) is None:
+                raise Exception('Undefined variable {}'.format(self.id))
+            elif AST.getEntry(self.id).type != 'Group' :
+                raise Exception('Expected variable type Group but got {}'.format(AST.getEntry(self.id).type))
+            
             self.cmd.generateInstruction()
 
     def typeChecking(self):
