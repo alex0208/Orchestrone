@@ -1,7 +1,14 @@
+function special_loop(group, height, t, loops, tr_list)
+{
+    group.takeOff(height);
+    group.wait(height);
+    group.transition(t);
+    group.loop(tr_list, loops);
+    group.land();
+}
+
 d1 = new Drone("ip1");
-D1 = new Drone("ip2");
-d2 = 10;
-height = new Drone("ip3");
+d2 = new Drone("ip2");
 
 initial_formation = new Formation([{drone:d1,x:1,y:1},{drone:d2,x:2,y:1}]);
 group = new Group(initial_formation);
@@ -15,5 +22,21 @@ transition = new Transition(second_formation, 10);
 group.transition(transition);
 
 group.wait(5);
+
+height = 5;
+numberOfLoops = 5;
+time = 5;
+
+loop_start_transition = new Transition(initial_formation, time);
+loop_end_transition = new Transition(second_formation, time);
+transitions = [loop_start_transition, loop_end_transition];
+
+special_loop(group, height, transition, numberOfLoops, transitions);
+
+height = 10;
+special_loop(group, height, transition, numberOfLoops, transitions);
+
+height = 10;
+special_loop(group, height, transition, numberOfLoops, transitions);
 
 group.land();

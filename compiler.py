@@ -43,7 +43,7 @@ class Compiler(object):
                 movement_offset = self.calculate_movement_offset(self.start_config, transition_dict)
                 movement_queue = self.generate_movement_queue(movement_offset)
                 flying_instrcutions.append(movement_queue)
-                self.start_config = transition_dict
+                # self.start_config = transition_dict
         return flying_instrcutions
 
     def calculate_movement_offset(self, start, finish):
