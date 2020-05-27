@@ -26,6 +26,8 @@ class FunctionCall(AST):
             if assign.expr:
                 func_sym_table.append(assign.expr.fillSymbolTable())
             if assign.cmd:
+                if resolved_args_dict.get(assign.id).type != 'Group':
+                    raise Exception('Expected variable type Group but got {}'.format(resolved_args_dict.get(assign.id).type))
                 if assign.cmd.type == 'takeOff':
                     if isinstance(assign.cmd.height, str):
                         tmp_height = resolved_args_dict.get(assign.cmd.height)
