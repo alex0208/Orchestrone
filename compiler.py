@@ -4,6 +4,12 @@ class Compiler(object):
 
         self.instructions = instructions
 
+        if not any(instr.type == 'takeOff' for instr in self.instructions):
+            raise Exception('No takeoff command found.')
+        
+        if not any(instr.type == 'land' for instr in self.instructions):
+            raise Exception('No land command found.')
+
         for instr in self.instructions:
             if instr.type == 'transition':
                 self.start_config = self.generate_drone_takeoff_position(instr.transition)
